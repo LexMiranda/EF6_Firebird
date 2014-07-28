@@ -1,27 +1,12 @@
-﻿using System;
-using System.Data.Entity;
-using System.Linq;
+﻿using System.Data.Entity;
 using FirebirdSql.Data.FirebirdClient;
 
-namespace EF6_Firebird
+namespace CodeFirst
 {
-	class Program
+	[DbConfigurationType(typeof(FirebirdContextConfiguration))]
+	class FirebirdContext : DbContext
 	{
-		static void Main(string[] args)
-		{
-			Database.SetInitializer<MyContext>(null);
-			using (var ctx = new MyContext())
-			{
-				var data = ctx.MONDatabase.First();
-				Console.WriteLine("Name:{0}\t{1}", Environment.NewLine, data.DatabaseName);
-				Console.WriteLine("CreationName:{0}\t{1}", Environment.NewLine, data.CreationDate);
-			}
-		}
-	}
-
-	class MyContext : DbContext
-	{
-		public MyContext()
+		public FirebirdContext()
 			: base(new FbConnection(@"database=localhost:test.fdb;user=sysdba;password=masterkey"), true)
 		{ }
 
@@ -37,11 +22,5 @@ namespace EF6_Firebird
 		}
 
 		public DbSet<MONDatabase> MONDatabase { get; set; }
-	}
-
-	class MONDatabase
-	{
-		public string DatabaseName { get; set; }
-		public DateTime CreationDate { get; set; }
 	}
 }
